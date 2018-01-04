@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Calculadora SJMA</string>
     <string name="advertencia_raiz">Primero escribe un número</string>
-    <string name="no">NO</string>
+    <string name="no">0</string>
     <string name="bienvenida">Bienvenido</string>
     <string name="textERROR">Causarás un error si tocas otra vez</string>
     <string name="dontWork">Este botón aún no funciona</string>

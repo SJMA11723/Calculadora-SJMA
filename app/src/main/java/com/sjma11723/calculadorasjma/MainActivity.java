@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private byte PUNTOT = 1; // 1 = boton de punto no ha sido tocado, 0 = fue  tocado
     private int j = 0;// Iterador de botón igual
     private int numTokens;
-    private StringTokenizer tokenizerSigno, tokenizerNumero;
     private boolean causarERROR = false;
 
     @Override
@@ -59,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        // Instanciamos los botones y Strings
 
         buttonMayorQue = findViewById(R.id.buttonMayorQue);
         buttonMenorQue = findViewById(R.id.buttonMenorQue);
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Añadimos el comportamiento a los botones
 
-        buttonMenorQue.setText("<");
+        buttonMenorQue.setText("<");// Añado aquí los signos ya que en strings.xml no me deja
         buttonMayorQue.setText(">");
 
         button0.setOnClickListener(new View.OnClickListener() {
@@ -364,6 +361,10 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
+                    } else if (containsAllSigns()){
+                        MyString operacion = new MyString(numeroMostrar.toString());
+                        StringTokenizer tokenizer = new StringTokenizer(numeroMostrar.toString(), "1234567890.");
+                        numeros[0] = Double.parseDouble(operacion.subString(operacion.indexOf("+"), operacion.indexOfSigns(operacion.indexOf("+"), "/x-^")));
                     }
 
 
@@ -460,9 +461,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (PUNTOT == 1) {
-                    numeroText.append('.');
-                    numeroMostrar.append('.');
-                    numTextView.setText(numeroMostrar);
+                    if (numeroText.length() == 0){
+                        numeroText.append('0');
+                        numeroMostrar.append('0');
+                        numeroText.append('.');
+                        numeroMostrar.append('.');
+                        numTextView.setText(numeroMostrar);
+                    }else {
+                        numeroText.append('.');
+                        numeroMostrar.append('.');
+                        numTextView.setText(numeroMostrar);
+                    }
+
                 }
             }
         });
@@ -470,9 +480,9 @@ public class MainActivity extends AppCompatActivity {
         buttonPotencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (numeroText.length() != 0 && SIGNOT == 1) {
+                if (numeroText.length() != 0 && SIGNOT == 1 || IGUALT == 0) { //verifica si ya se han escrito números y si algún otro signo ya fue tocado
 
-                    if (i >= 1 && IGUALT == 1) {
+                    if (i >= 0 && IGUALT == 1) {
                         numeros[i] = Double.parseDouble(numeroText.toString());//Asigna el valor escrito al número actual
                         numeroText.delete(0, numeroText.length());
 
@@ -484,18 +494,30 @@ public class MainActivity extends AppCompatActivity {
                         numeroMostrar.append('^');
                         numTextView.setText(numeroMostrar);
                     }
-                }
+                    SIGNOT = 0;
 
-                SIGNOT = 0;
-
-                if (RAIZT == 0) {
+                } else if (numeroText.length() == 0){//si entra aquí significa que no ha escrito números y la base es cero
+                    numeros[i] = 0;
+                    numeroMostrar.append('0');
+                    numeroMostrar.append('^');
+                    numTextView.setText(numeroMostrar);
+                    SIGNOT = 0;
+                    i++;
+                } else if (RAIZT == 0) {
                     numeroText.delete(0, numeroText.length());
 
                     numeroMostrar.append('^');
                     numTextView.setText(numeroMostrar);
                     i++;
                     RAIZT = 1;
+                    SIGNOT = 0;
                 }
+
+
+
+
+                IGUALT = 1;
+
             }
         });
 
@@ -540,6 +562,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean lastCharIsSign() {
+
         if (numeroMostrar.charAt(numeroMostrar.length() - 1) == '+' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '-' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '/' ||
                 numeroMostrar.charAt(numeroMostrar.length() - 1) == 'X' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '√' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '^' ||
                 numeroMostrar.charAt(numeroMostrar.length() - 1) == '{' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '}' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '(' ||
@@ -578,12 +601,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     private void escribirNumero(char numero) {
+        if (numeroText.length() <= 9){ // la cantidad máxima de dígitos es nueve
+            numeroText.append(numero);
+            numeroMostrar.append(numero);
+            numTextView.setText(numeroMostrar);
 
-        numeroText.append(numero);
-        numeroMostrar.append(numero);
-        numTextView.setText(numeroMostrar);
-
-        RAIZT = 1;
+            RAIZT = 1;
+        }
     }
 
     private void funcionSigno(char signo) {
@@ -603,7 +627,7 @@ public class MainActivity extends AppCompatActivity {
             }
             SIGNOT = 0;
 
-        } else if (numeroMostrar.length() == 0){//se escribe un signo de más para indicar que el primer número es positivo
+        } else if (numeroMostrar.length() == 0 && (signo == '+' || signo == '-')){//se escribe un signo de más para indicar que el primer número es positivo o negativo
             numeroText.append(signo);
             numeroMostrar.append(signo);
             numTextView.setText(numeroMostrar);
@@ -633,6 +657,8 @@ public class MainActivity extends AppCompatActivity {
         byte conteoDiv = 0;
         byte conteoPotencia = 0;
 
+        StringTokenizer tokenizerSigno = new StringTokenizer(numeroMostrar.toString(), "1234567890.");
+
         do{
 
             switch (tokenizerSigno.nextToken()){
@@ -642,11 +668,11 @@ public class MainActivity extends AppCompatActivity {
                 case "-":
                     conteoResta++;
                     break;
-                case "X":
+                case "x":
                     conteoMulti++;
                     break;
                 case "/":
-                    conteoMulti++;
+                    conteoDiv++;
                     break;
                 case "^":
                     conteoPotencia++;
@@ -689,5 +715,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void ordenarJerarquia(){
 
+    }
 }

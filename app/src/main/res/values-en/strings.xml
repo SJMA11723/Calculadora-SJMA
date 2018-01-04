@@ -3,7 +3,7 @@
     <string name="app_name">Calculator SJMA</string>
     <string name="advertencia_raiz">First write a number</string>
     <string name="bienvenida">Welcome</string>
-    <string name="no">NO</string>
+    <string name="no">0</string>
     <string name="textERROR">You will cause an error if you touch again</string>
     <string name="fontWork">This button don\'t work yet</string>
 </resources>
