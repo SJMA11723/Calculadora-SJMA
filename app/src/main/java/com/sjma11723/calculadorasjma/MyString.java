@@ -33,9 +33,6 @@ public class MyString implements Serializable, CharSequence {
 
     @Override
     public char charAt(int i) {
-
-
-
         return texto.charAt(i);
     }
 
@@ -121,6 +118,18 @@ public class MyString implements Serializable, CharSequence {
 
     public int indexOf(String str, int fromIndex){
         return texto.indexOf(str, fromIndex);
+    }
+
+    public MyString delete(int start, int end){
+        return new MyString(texto.delete(start, end).toString());
+    }
+
+    public String reverse(){
+        return texto.reverse().toString();
+    }
+
+    public String replace(int start, int end, String str){
+        return texto.replace(start, end, str).toString();
     }
 
 }
