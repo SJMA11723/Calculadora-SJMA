@@ -55,12 +55,18 @@ public class MainActivity extends AppCompatActivity {
     private boolean resultBoolean;
     private int numTokens;
     private boolean causarERROR = false;
-
-    byte conteoSuma = 0;
-    byte conteoResta = 0;
-    byte conteoMulti = 0;
-    byte conteoDiv = 0;
-    byte conteoPotencia = 0;
+    private double terminoSuma[] = new double[2];
+    private double terminoResta[] = new double[2];
+    private double terminoDiv[] = new double[2];
+    private double terminoMulti[] = new double[2];
+    private double terminoPotencia[] = new double[2];
+    private double termino[] = new double[2];
+    private byte conteoSuma = 0;
+    private byte conteoResta = 0;
+    private byte conteoMulti = 0;
+    private byte conteoDiv = 0;
+    private byte conteoPotencia = 0;
+    private MyString operacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,14 +276,12 @@ public class MainActivity extends AppCompatActivity {
                     if (numeroText.length() != 0 && i == 0) {
                         numeros[i] = Math.sqrt(Double.parseDouble(numeroText.toString()));
 
-                        int resultadoInt = (int) numeros[i];
-
                         numeroMostrar.delete(0, numeroMostrar.length());
                         numeroMostrar.append('√');
                         numeroMostrar.append(numeroText);
-                        if (numeros[0] - resultadoInt == 0.0f) {//comprueba si contiene decimales
-                            numTextView.setText(numeroMostrar + "\n" + "= " + resultadoInt);
-                            numeroMostrar.replace(0, numeroMostrar.length(), String.valueOf(resultadoInt));
+                        if (!comprobarDecimales(numeros[i])) {//comprueba si contiene decimales
+                            numTextView.setText(numeroMostrar + "\n" + "= " + (int)numeros[i]);
+                            numeroMostrar.replace(0, numeroMostrar.length(), String.valueOf((int)numeros[i]));
                         } else {
                             numTextView.setText(numeroMostrar + "\n" + "= " + numeros[i]);
                             numeroMostrar.replace(0, numeroMostrar.length(), String.valueOf(numeros[i]));
@@ -368,158 +372,62 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     } else if (containsMoreSigns()){
-                        MyString operacion = new MyString(numeroMostrar.toString());
-
-                        double terminoSuma[] = new double[2];
-                        double terminoResta[] = new double[2];
-                        double terminoDiv[] = new double[2];
-                        double terminoMulti[] = new double[2];
-                        double terminoPotencia[] = new double[2];
-
-
-
+                        operacion = new MyString(numeroMostrar.toString());
 
                         for (int a = 0; a < conteoPotencia ; a++) {
                             int indexPotenciaActual = operacion.indexOf("^");
                             if (indexPotenciaActual != -1){
-                                terminoPotencia[1] = Double.parseDouble(operacion.subString(operacion.indexOf("^")+1, operacion.indexOfSigns(operacion.indexOf("^"), "/x-+")));
-                                operacion.reverse();
-                                MyString string = new MyString(operacion.subString(operacion.length()-indexPotenciaActual, operacion.indexOfSigns(operacion.length()-indexPotenciaActual, "/x-+")));
-                                terminoPotencia[0] = Double.valueOf(string.reverse());
-                                int tamañoBase = string.length();
-                                operacion.reverse();
-                                operacion.replace(indexPotenciaActual-tamañoBase, operacion.indexOfSigns( indexPotenciaActual, "/x-+"), String.valueOf(Math.pow(terminoPotencia[0], terminoPotencia[1])));
+                                operacion("^", indexPotenciaActual);
                             }
 
                         }
 
-                        int conteoMayor;
+                        int conteoSigno = conteoDiv + conteoMulti;
 
-                        if (conteoDiv < conteoMulti){
-                            conteoMayor = conteoMulti;
-                        } else {
-                            conteoMayor = conteoDiv;
-                        }
-
-                        for (int a = 0; a < conteoMayor*2; a++){
+                        for (int a = 0; a < conteoSigno; a++){
                             int indexDivisionActual = operacion.indexOf("/");
                             int indexMultiplicacionActual = operacion.indexOf("x");
 
                             if (indexDivisionActual != -1 && indexMultiplicacionActual != -1){
                                 if (indexMultiplicacionActual < indexDivisionActual){
-                                    terminoMulti[1] = Double.parseDouble(operacion.subString(operacion.indexOf("x")+1, operacion.indexOfSigns(operacion.indexOf("x"), "/-+^")));
-                                    operacion.reverse();
-                                    MyString string = new MyString(operacion.subString(operacion.length()-indexMultiplicacionActual, operacion.indexOfSigns(operacion.length()-indexMultiplicacionActual, "/-+^")));
-                                    terminoMulti[0] = Double.valueOf(string.reverse());
-                                    int tamañoBase = string.length();
-                                    operacion.reverse();
-                                    operacion.replace(indexMultiplicacionActual-tamañoBase, operacion.indexOfSigns( indexMultiplicacionActual, "/-+^"), String.valueOf(terminoMulti[0]*terminoMulti[1]));
+                                    operacion("x", indexMultiplicacionActual);
 
                                 } else {
-
-                                    terminoDiv[1] = Double.parseDouble(operacion.subString(operacion.indexOf("/")+1, operacion.indexOfSigns(operacion.indexOf("/"), "x-+^")));
-                                    operacion.reverse();
-
-                                    MyString string = new MyString(operacion.subString(operacion.length()-indexDivisionActual, operacion.indexOfSigns(operacion.length()-indexDivisionActual, "x-+^")));
-                                    terminoDiv[0] = Double.valueOf(string.reverse());
-
-                                    int tamañoBase = string.length();
-                                    operacion.reverse();
-
-                                    try {
-                                        operacion.replace(indexDivisionActual-tamañoBase, operacion.indexOfSigns( indexDivisionActual, "^x-+"), String.valueOf(terminoDiv[0]/terminoDiv[1]));
-                                    }catch (Exception e){
-                                        Toast.makeText(MainActivity.this, R.string.divByZero, Toast.LENGTH_SHORT).show();
-                                        break;
-                                    }
+                                    operacion("/", indexDivisionActual);
 
                                 }
 
 
                             } else if (indexDivisionActual >= 1){
-                                terminoDiv[1] = Double.parseDouble(operacion.subString(operacion.indexOf("/")+1, operacion.indexOfSigns(operacion.indexOf("/"), "x-+^")));
-                                operacion.reverse();
-
-                                MyString string = new MyString(operacion.subString(operacion.length()-indexDivisionActual, operacion.indexOfSigns(operacion.length()-indexDivisionActual, "x-+^")));
-                                terminoDiv[0] = Double.valueOf(string.reverse());
-
-                                int tamañoBase = string.length();
-                                operacion.reverse();
-                                try {
-                                    operacion.replace(indexDivisionActual-tamañoBase, operacion.indexOfSigns( indexDivisionActual, "^x-+"), String.valueOf(terminoDiv[0]/terminoDiv[1]));
-                                }catch (Exception e){
-                                    Toast.makeText(MainActivity.this, R.string.divByZero, Toast.LENGTH_SHORT).show();
-                                    break;
-                                }
-
+                                operacion("/", indexDivisionActual);
 
                             } else if (indexMultiplicacionActual >= 1){
-                                terminoMulti[1] = Double.parseDouble(operacion.subString(operacion.indexOf("x")+1, operacion.indexOfSigns(operacion.indexOf("x"), "/-+^")));
-                                operacion.reverse();
-                                MyString string = new MyString(operacion.subString(operacion.length()-indexMultiplicacionActual, operacion.indexOfSigns(operacion.length()-indexMultiplicacionActual, "/-+^")));
-                                terminoMulti[0] = Double.valueOf(string.reverse());
-                                int tamañoBase = string.length();
-                                operacion.reverse();
-                                operacion.replace(indexMultiplicacionActual-tamañoBase, operacion.indexOfSigns( indexMultiplicacionActual, "/-+^"), String.valueOf(terminoMulti[0]*terminoMulti[1]));
-
+                                operacion("x", indexMultiplicacionActual);
                             }
 
                         }
 
-                        if (conteoSuma < conteoResta){
-                            conteoMayor = conteoResta;
-                        } else {
-                            conteoMayor = conteoSuma;
-                        }
 
-                        for (int a = 0; a < conteoMayor*2; a++){
+                        conteoSigno = conteoSuma + conteoResta;
+
+                        for (int a = 0; a < conteoSigno; a++){
                             int indexSumaActual = operacion.indexOf("+");
                             int indexRestaActual = operacion.indexOf("-");
 
                             if (indexSumaActual != -1 && indexRestaActual != -1){
                                 if (indexRestaActual < indexSumaActual){
-                                    terminoResta[1] = Double.parseDouble(operacion.subString(operacion.indexOf("-")+1, operacion.indexOfSigns(operacion.indexOf("-"), "/+^x")));
-                                    operacion.reverse();
-                                    MyString string = new MyString(operacion.subString(operacion.length()-indexRestaActual, operacion.indexOfSigns(operacion.length()-indexRestaActual, "/x+^")));
-                                    terminoResta[0] = Double.valueOf(string.reverse());
-                                    int tamañoBase = string.length();
-                                    operacion.reverse();
-                                    operacion.replace(indexRestaActual-tamañoBase, operacion.indexOfSigns( indexRestaActual, "/+x^"), String.valueOf(terminoResta[0]-terminoResta[1]));
+                                    operacion("-", indexRestaActual);
 
                                 } else {
-
-                                    terminoSuma[1] = Double.parseDouble(operacion.subString(operacion.indexOf("+")+1, operacion.indexOfSigns(operacion.indexOf("+"), "x-^/")));
-                                    operacion.reverse();
-
-                                    MyString string = new MyString(operacion.subString(operacion.length()-indexSumaActual, operacion.indexOfSigns(operacion.length()-indexSumaActual, "x-^/")));
-                                    terminoSuma[0] = Double.valueOf(string.reverse());
-
-                                    int tamañoBase = string.length();
-                                    operacion.reverse();
-                                    operacion.replace(indexSumaActual-tamañoBase, operacion.indexOfSigns( indexSumaActual, "^x-/"), String.valueOf(terminoSuma[0]+terminoSuma[1]));
+                                    operacion("+", indexSumaActual);
 
                                 }
 
                             } else if (indexSumaActual >= 1){
-                                terminoSuma[1] = Double.parseDouble(operacion.subString(operacion.indexOf("+")+1, operacion.indexOfSigns(operacion.indexOf("+")+1, "x-/+")));
-                                operacion.reverse();
-
-                                MyString string = new MyString(operacion.subString(operacion.length()-indexSumaActual, operacion.indexOfSigns(operacion.length()-indexSumaActual, "x-/+")));
-                                terminoSuma[0] = Double.valueOf(string.reverse());
-
-                                int tamañoBase = string.length();
-                                operacion.reverse();
-                                operacion.replace(indexSumaActual-tamañoBase, operacion.indexOfSigns( indexSumaActual+1, "x-/+"), String.valueOf(terminoSuma[0]+terminoSuma[1]));
+                                operacion("+", indexSumaActual);
 
                             } else if (indexRestaActual >= 1){
-                                terminoResta[1] = Double.parseDouble(operacion.subString(operacion.indexOf("-")+1, operacion.indexOfSigns(operacion.indexOf("-")+1, "x/+-")));
-                                operacion.reverse();
-                                MyString string = new MyString(operacion.subString(operacion.length()-indexRestaActual, operacion.indexOfSigns(operacion.length()-indexRestaActual, "x-/+")));
-                                terminoResta[0] = Double.valueOf(string.reverse());
-                                int tamañoBase = string.length();
-                                operacion.reverse();
-                                operacion.replace(indexRestaActual-tamañoBase, operacion.indexOfSigns( indexRestaActual+1, "-x+/"), String.valueOf(terminoResta[0]-terminoResta[1]));
-
+                                operacion("-", indexRestaActual);
                             }
 
                         }
@@ -549,10 +457,9 @@ public class MainActivity extends AppCompatActivity {
                     if (menorIsTouched == 0 || mayorIsTouched == 0){
                         numTextView.setText(numeroMostrar+"\n= "+resultBoolean);
                     } else {
-                        int resultadoInt = (int) numeros[0]; //convierte el resultado a int
 
-                        if (numeros[0] - resultadoInt == 0.0f) { //Comprueba si tiene decimales
-                            numTextView.setText(numeroMostrar + "\n= " + resultadoInt); //Muestra el resultado en tipo int si no tiene decimales
+                        if (!comprobarDecimales(numeros[0])) { //Comprueba si tiene decimales
+                            numTextView.setText(numeroMostrar + "\n= " + (int)numeros[0]); //Muestra el resultado en tipo int si no tiene decimales
                             numeroMostrar.replace(0, numeroMostrar.length(), String.valueOf(((int) numeros[0]))); //En vez de mostrar la operación (1+1+4...) muestra el resultado para seguir operando
                         } else {
                             numTextView.setText(numeroMostrar + "\n= " + numeros[0]); //Muestra el resultado en double si tiene decimales
@@ -577,11 +484,8 @@ public class MainActivity extends AppCompatActivity {
                         i--;
                         signoIsTouched = 1;
 
-
-                        int resultadoInt = (int) numeros[i]; //convierte el resultado a int
-
-                        if (numeros[i] - resultadoInt == 0.0f) { //Comprueba si tiene decimales
-                            numeroText.append(resultadoInt);
+                        if (!comprobarDecimales(numeros[i])) { //Comprueba si tiene decimales
+                            numeroText.append((int)numeros[i]);
                         } else {
                             numeroText.append(numeros[i]);
                         }
@@ -668,6 +572,8 @@ public class MainActivity extends AppCompatActivity {
                         numeroMostrar.append('.');
                         numTextView.setText(numeroMostrar);
                     }
+
+                    puntoIsTouched = 0;
 
                 }
             }
@@ -814,12 +720,14 @@ public class MainActivity extends AppCompatActivity {
                 numTextView.setText(numeroMostrar);
             }
             signoIsTouched = 0;
+            puntoIsTouched = 1;
 
-        } else if (numeroMostrar.length() == 0 && (signo == '+' || signo == '-')){//se escribe un signo de más para indicar que el primer número es positivo o negativo
+        } else if (numeroMostrar.length() == 0 && (signo == '+' || signo == '-')){//se escribe un signo de 'más' o 'menos' para indicar que el primer número es positivo o negativo
             numeroText.append(signo);
             numeroMostrar.append(signo);
             numTextView.setText(numeroMostrar);
             signoIsTouched = 0;
+            puntoIsTouched = 1;
         } else if (raizIsTouched == 0) {
             numeroText.delete(0, numeroText.length());
 
@@ -828,6 +736,7 @@ public class MainActivity extends AppCompatActivity {
             i++;
             raizIsTouched = 1;
             signoIsTouched = 0;
+            puntoIsTouched = 1;
         }
 
 
@@ -895,5 +804,63 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private boolean comprobarDecimales(double numero){
+        int entero = (int) numero;
+
+        if(numero - entero == 0.0f){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void operacion(String signo, int indexOperacionActual){
+        termino[1] = Double.parseDouble(operacion.subString(operacion.indexOf(signo)+1, operacion.indexOfSigns(operacion.indexOf(signo)+1, "/-+^x")));
+        operacion.reverse();
+        MyString string = new MyString(operacion.subString(operacion.length()-indexOperacionActual, operacion.indexOfSigns(operacion.length()-indexOperacionActual, "/-+^")));
+        termino[0] = Double.valueOf(string.reverse());
+        int tamañoBase = string.length();
+        operacion.reverse();
+        String stringReplace;
+        if(comprobarDecimales(opTerminos(termino[0], termino[1], signo))){
+            stringReplace = String.valueOf(opTerminos(termino[0], termino[1], signo));
+        } else {
+            stringReplace = String.valueOf((int)opTerminos(termino[0], termino[1], signo));
+        }
+        operacion.replace(indexOperacionActual-tamañoBase, operacion.indexOfSigns( indexOperacionActual+1, "/x-+^"), String.valueOf(stringReplace));
+    }
+
+    private double opTerminos(double termino1, double termino2, String signo){
+
+        double ret;
+
+        switch (signo){
+            case "x":
+                ret = termino1 * termino2;
+                break;
+
+            case "+":
+                ret = termino1 + termino2;
+                break;
+
+            case "-":
+                ret = termino1 - termino2;
+                break;
+
+            case "/":
+                ret = termino1 / termino2;
+                break;
+
+            case "^":
+                ret = Math.pow(termino1, termino2);
+                break;
+
+            default:
+                ret = 0;
+        }
+
+        return ret;
     }
 }
