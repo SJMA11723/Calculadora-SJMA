@@ -31,16 +31,25 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/buttonRaiz"
-            android:layout_width="128dp"
-            android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:text="√"/>
-        <Button
-            android:id="@+id/buttonPotencia"
             android:layout_width="64dp"
             android:layout_height="match_parent"
             android:textStyle="bold"
-            android:text="^"/>
+            android:text="√"/>
+
+        <Button
+            android:id="@+id/buttonParentesisApertura"
+            android:textStyle="bold"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:text="(" />
+
+        <Button
+            android:id="@+id/buttonParentesisCierre"
+            android:textStyle="bold"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:text=")" />
+
         <Button
             android:id="@+id/buttonClear"
             android:textStyle="bold"
@@ -82,11 +91,11 @@
             android:text="9" />
 
         <Button
-            android:id="@+id/buttonParentesis"
-            android:textStyle="bold"
+            android:id="@+id/buttonPotencia"
             android:layout_width="64dp"
             android:layout_height="match_parent"
-            android:text="{()}" />
+            android:textStyle="bold"
+            android:text="^"/>
 
         <Button
             android:id="@+id/buttonMenorQue"

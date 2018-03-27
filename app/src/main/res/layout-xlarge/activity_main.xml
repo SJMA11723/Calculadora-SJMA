@@ -87,12 +87,12 @@
             android:text="9" />
 
         <Button
-            android:id="@+id/buttonParentesis"
+            android:id="@+id/buttonParentesisApertura"
             android:textStyle="bold"
             android:textSize="80sp"
             android:layout_width="160dp"
             android:layout_height="match_parent"
-            android:text="{()}" />
+            android:text="( )" />
 
         <Button
             android:id="@+id/buttonMenorQue"

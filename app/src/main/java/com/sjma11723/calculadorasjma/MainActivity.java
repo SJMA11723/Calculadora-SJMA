@@ -17,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonMayorQue;
     private Button buttonPunto;
     private Button buttonIgual;
-    private Button buttonParentesis;
+    private Button buttonParentesisApertura;
+    private Button buttonParentesisCierre;
     private Button buttonSuma;
     private Button buttonResta;
     private Button buttonMulti;
@@ -51,22 +52,20 @@ public class MainActivity extends AppCompatActivity {
     private byte menorIsTouched = 1;
     private byte mayorIsTouched = 1;//Lo mismo
     private byte puntoIsTouched = 1; // 1 = boton de punto no ha sido tocado, 0 = fue  tocado
+    private byte parentIsTouched = 1;
     private int j = 0;// Iterador de botón igual
     private boolean resultBoolean;
     private int numTokens;
     private boolean causarERROR = false;
-    private double terminoSuma[] = new double[2];
-    private double terminoResta[] = new double[2];
-    private double terminoDiv[] = new double[2];
-    private double terminoMulti[] = new double[2];
-    private double terminoPotencia[] = new double[2];
     private double termino[] = new double[2];
     private byte conteoSuma = 0;
     private byte conteoResta = 0;
     private byte conteoMulti = 0;
     private byte conteoDiv = 0;
     private byte conteoPotencia = 0;
-    private MyString operacion;
+    private byte conteoPInicio = 0;
+    private byte conteoPCierre = 0;
+    private MyString operacion, parentesisActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         buttonERROR = findViewById(R.id.buttonERROR);
         buttonIgual = findViewById(R.id.buttonIgual);
         buttonMulti = findViewById(R.id.buttonMulti);
-        buttonParentesis = findViewById(R.id.buttonParentesis);
+        buttonParentesisApertura = findViewById(R.id.buttonParentesisApertura);
+        buttonParentesisCierre = findViewById(R.id.buttonParentesisCierre);
         buttonPotencia = findViewById(R.id.buttonPotencia);
         buttonPunto = findViewById(R.id.buttonPunto);
         buttonRaiz = findViewById(R.id.buttonRaiz);
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (igualIsTouched == 1 && numeroText.length() != 0 && !lastCharIsSign()) {
+                if (igualIsTouched == 1 && numeroText.length() != 0 && (!lastCharIsSign(numeroMostrar.toString()) || numeroMostrar.charAt(numeroMostrar.length()-1) == ')') && comprobarParentesis()) {
 
                     numeros[i] = Double.parseDouble(numeroText.toString()); //Asigna el valor escrito al número actual
 
@@ -371,8 +371,33 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-                    } else if (containsMoreSigns()){
+                    } else if (countMoreSigns(numeroMostrar.toString())){
                         operacion = new MyString(numeroMostrar.toString());
+
+                        while (conteoPInicio != 0){
+                            parentesisActual = new MyString(operacion.subString(operacion.lastIndexOf("(")+1, operacion.indexOf(")", operacion.lastIndexOf("("))));
+                            countMoreSigns(parentesisActual.toString());
+                            operarParentesis();
+                            if (operacion.lastIndexOf("(") >= 1){
+                                if (operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("^") || operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("+") || operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("-") || operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("x") || operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("/") || operacion.subString(operacion.lastIndexOf("(")-1, operacion.lastIndexOf("(")).contains("(")){
+                                    deshacerParentesis(operacion.lastIndexOf("("), operacion.indexOf(")", operacion.lastIndexOf("("))+1, parentesisActual.toString());
+                                } else {
+                                    deshacerParentesis(operacion.lastIndexOf("("), operacion.indexOf(")", operacion.lastIndexOf("("))+1, "x" + parentesisActual.toString());
+                                }
+                            } else {
+                                if ((operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains("^") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains("+") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains("-") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains("x") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains("/") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains(")")) && operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1 == operacion.length()){//comprueba si solo hay un par de parénteis y todas las operaciones están dentro de él;
+                                    deshacerParentesis(operacion.lastIndexOf("("), operacion.indexOf(")", operacion.lastIndexOf("("))+1, parentesisActual.toString());
+                                }else if (operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+2).contains("^") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+2).contains("+") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+2).contains("-") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+2).contains("x") || operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+2).contains("/") || (operacion.subString(operacion.lastIndexOf(")")-1, operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1).contains(")")) && operacion.indexOfSigns(operacion.lastIndexOf(")")-1, "()/-+x^")+1 == operacion.length()){//en otro caso, comprueba si hay signos después del paréntesis de cierre, si hay signos, agrega solo el resultado;
+                                    deshacerParentesis(operacion.lastIndexOf("("), operacion.indexOf(")", operacion.lastIndexOf("("))+1, parentesisActual.toString());
+                                } else {
+                                    deshacerParentesis(operacion.lastIndexOf("("), operacion.indexOf(")", operacion.lastIndexOf("("))+1, parentesisActual.toString() + "x");//si no hay signos, agrega un signo de multiplicación;
+                                }
+                            }
+
+                            countMoreSigns(operacion.toString());
+                        }
+
+                        countMoreSigns(operacion.toString());//cuenta otra vez los signos
 
                         for (int a = 0; a < conteoPotencia ; a++) {
                             int indexPotenciaActual = operacion.indexOf("^");
@@ -450,8 +475,6 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-
-
                     numeroText.delete(0, numeroText.length());
 
                     if (menorIsTouched == 0 || mayorIsTouched == 0){
@@ -479,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (numeroMostrar.length() != 0 && igualIsTouched == 1) {
-                    if (lastCharIsSign()) {
+                    if (lastCharIsSign(numeroMostrar.toString()) && numeroMostrar.charAt(numeroMostrar.length()-1) != '(') {
 
                         i--;
                         signoIsTouched = 1;
@@ -490,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                             numeroText.append(numeros[i]);
                         }
 
-                    } else {
+                    } else if (numeroMostrar.charAt(numeroMostrar.length()-1) != ')' && numeroMostrar.charAt(numeroMostrar.length()-1) != '('){
                         numeroText.deleteCharAt(numeroText.length() - 1);
                         signoIsTouched = 1;
                     }
@@ -582,43 +605,7 @@ public class MainActivity extends AppCompatActivity {
         buttonPotencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (numeroText.length() != 0 && signoIsTouched == 1 || igualIsTouched == 0) { //verifica si ya se han escrito números y si algún otro signo ya fue tocado
-
-                    if (i >= 0 && igualIsTouched == 1) {
-                        numeros[i] = Double.parseDouble(numeroText.toString());//Asigna el valor escrito al número actual
-                        numeroText.delete(0, numeroText.length());
-
-                        numeroMostrar.append('^');
-                        numTextView.setText(numeroMostrar);
-                        i++; // Pasa al siguiente número
-                    } else if (i >= 1 && igualIsTouched == 0) {
-
-                        numeroMostrar.append('^');
-                        numTextView.setText(numeroMostrar);
-                    }
-                    signoIsTouched = 0;
-
-                } else if (numeroText.length() == 0){//si entra aquí significa que no ha escrito números y la base es cero
-                    numeros[i] = 0;
-                    numeroMostrar.append('0');
-                    numeroMostrar.append('^');
-                    numTextView.setText(numeroMostrar);
-                    signoIsTouched = 0;
-                    i++;
-                } else if (raizIsTouched == 0) {
-                    numeroText.delete(0, numeroText.length());
-
-                    numeroMostrar.append('^');
-                    numTextView.setText(numeroMostrar);
-                    i++;
-                    raizIsTouched = 1;
-                    signoIsTouched = 0;
-                }
-
-
-
-
-                igualIsTouched = 1;
+                funcionSigno('^');
 
             }
         });
@@ -634,6 +621,7 @@ public class MainActivity extends AppCompatActivity {
                     i++;
                     signoIsTouched = 0;
                     mayorIsTouched = 0;
+                    puntoIsTouched = 1;
                 }
 
             }
@@ -649,15 +637,29 @@ public class MainActivity extends AppCompatActivity {
                     numTextView.setText(numeroMostrar);
                     i++;
                     signoIsTouched = 0;
+                    puntoIsTouched = 1;
                     menorIsTouched = 0;
                 }
 
             }
         });
 
-        buttonParentesis.setOnClickListener(new View.OnClickListener() {
+        buttonParentesisApertura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                numeroMostrar.append("(");
+                numTextView.setText(numeroMostrar);
+                igualIsTouched = 1;
+            }
+        });
+
+        buttonParentesisCierre.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (numeroMostrar.length() != 0 && !lastCharIsSign(numeroMostrar.toString()) && igualIsTouched == 1 && !comprobarParentesis()){
+                    numeroMostrar.append(")");
+                    numTextView.setText(numeroMostrar);
+                }
 
             }
         });
@@ -682,12 +684,11 @@ public class MainActivity extends AppCompatActivity {
         igualIsTouched = 1;
     }
 
-    private boolean lastCharIsSign() {
+    private boolean lastCharIsSign(String numeroMostrar) {
 
         if (numeroMostrar.charAt(numeroMostrar.length() - 1) == '+' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '-' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '/' ||
-                numeroMostrar.charAt(numeroMostrar.length() - 1) == 'X' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '√' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '^' ||
-                numeroMostrar.charAt(numeroMostrar.length() - 1) == '{' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '}' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '(' ||
-                numeroMostrar.charAt(numeroMostrar.length() - 1) == ')' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '<' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '>') {
+                numeroMostrar.charAt(numeroMostrar.length() - 1) == 'x' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '√' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '^' ||
+                numeroMostrar.charAt(numeroMostrar.length() - 1) == '{' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '(' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '<' || numeroMostrar.charAt(numeroMostrar.length() - 1) == '>') {
             return true;
         } else {
             return false;
@@ -695,13 +696,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void escribirNumero(char numero) {
-        if (numeroText.length() <= 9){ // la cantidad máxima de dígitos es nueve
             numeroText.append(numero);
             numeroMostrar.append(numero);
             numTextView.setText(numeroMostrar);
 
             raizIsTouched = 1;
-        }
     }
 
     private void funcionSigno(char signo) {
@@ -713,7 +712,9 @@ public class MainActivity extends AppCompatActivity {
 
                 numeroMostrar.append(signo);
                 numTextView.setText(numeroMostrar);
-                i++; // Pasa al siguiente número
+                if (lastCharIsSign(numeroMostrar.toString())){
+                    i++; // Pasa al siguiente número si el digito anterior no fue un signo
+                }
             } else if (i >= 1 && igualIsTouched == 0) {
 
                 numeroMostrar.append(signo);
@@ -728,6 +729,13 @@ public class MainActivity extends AppCompatActivity {
             numTextView.setText(numeroMostrar);
             signoIsTouched = 0;
             puntoIsTouched = 1;
+        } else if (numeroText.length() == 0){//si entra aquí significa que no ha escrito números y la base es cero
+            numeros[i] = 0;
+            numeroMostrar.append('0');
+            numeroMostrar.append(signo);
+            numTextView.setText(numeroMostrar);
+            signoIsTouched = 0;
+            i++;
         } else if (raizIsTouched == 0) {
             numeroText.delete(0, numeroText.length());
 
@@ -746,34 +754,50 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean containsMoreSigns(){
+    private boolean countMoreSigns(String operacion){
 
-        StringTokenizer tokenizerSigno = new StringTokenizer(numeroMostrar.toString(), "1234567890.");
+        StringBuilder builderSigno = new StringBuilder(operacion+"1234567890");
 
-        do{
+        conteoSuma = 0;
+        conteoResta = 0;
+        conteoMulti = 0;
+        conteoDiv = 0;
+        conteoPInicio = 0;
+        conteoPotencia = 0;
 
-            switch (tokenizerSigno.nextToken()){
-                case "+":
-                    conteoSuma++;
-                    break;
-                case "-":
-                    conteoResta++;
-                    break;
-                case "x":
-                    conteoMulti++;
-                    break;
-                case "/":
-                    conteoDiv++;
-                    break;
-                case "^":
-                    conteoPotencia++;
-                    break;
-                default:
+        for (int a = 0; a < builderSigno.length(); a++){
+            if (builderSigno.indexOf("(") != -1){
+                conteoPInicio++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("("));
             }
 
-        }while (tokenizerSigno.hasMoreTokens());
+            if (builderSigno.indexOf("^") != -1){
+                conteoPotencia++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("^"));
+            }
 
-        if (conteoSuma != 0 || conteoResta != 0 || conteoMulti != 0 || conteoDiv != 0 || conteoPotencia != 0){
+            if (builderSigno.indexOf("x") != -1){
+                conteoMulti++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("x"));
+            }
+
+            if (builderSigno.indexOf("/") != -1){
+                conteoDiv++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("/"));
+            }
+
+            if (builderSigno.indexOf("+") != -1){
+                conteoSuma++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("+"));
+            }
+
+            if (builderSigno.indexOf("-") != -1){
+                conteoResta++;
+                builderSigno.deleteCharAt(builderSigno.indexOf("-"));
+            }
+        }
+
+        if (conteoSuma != 0 || conteoResta != 0 || conteoMulti != 0 || conteoDiv != 0 || conteoPotencia != 0 || conteoPInicio != 0 || conteoPCierre != 0){
             return true;
         } else {
             return false;
@@ -819,8 +843,8 @@ public class MainActivity extends AppCompatActivity {
     private void operacion(String signo, int indexOperacionActual){
         termino[1] = Double.parseDouble(operacion.subString(operacion.indexOf(signo)+1, operacion.indexOfSigns(operacion.indexOf(signo)+1, "/-+^x")));
         operacion.reverse();
-        MyString string = new MyString(operacion.subString(operacion.length()-indexOperacionActual, operacion.indexOfSigns(operacion.length()-indexOperacionActual, "/-+^")));
-        termino[0] = Double.valueOf(string.reverse());
+        MyString string = new MyString(operacion.subString(operacion.length()-indexOperacionActual, operacion.indexOfSigns(operacion.length()-indexOperacionActual, "/-+x^")));
+        termino[0] = Double.valueOf(string.reverse().toString());
         int tamañoBase = string.length();
         operacion.reverse();
         String stringReplace;
@@ -830,6 +854,22 @@ public class MainActivity extends AppCompatActivity {
             stringReplace = String.valueOf((int)opTerminos(termino[0], termino[1], signo));
         }
         operacion.replace(indexOperacionActual-tamañoBase, operacion.indexOfSigns( indexOperacionActual+1, "/x-+^"), String.valueOf(stringReplace));
+    }
+
+    private MyString operacionParentesis(String signo, int indexOperacionActual, MyString operacion){
+        termino[1] = Double.parseDouble(operacion.subString(operacion.indexOf(signo)+1, operacion.indexOfSigns(operacion.indexOf(signo)+1, "/-+^x")));
+        operacion.reverse();
+        MyString string = new MyString(operacion.subString(operacion.length()-indexOperacionActual, operacion.indexOfSigns(operacion.length()-indexOperacionActual, "/-+x^")));
+        termino[0] = Double.valueOf(string.reverse().toString());
+        int tamañoBase = string.length();
+        operacion.reverse();
+        String stringReplace;
+        if(comprobarDecimales(opTerminos(termino[0], termino[1], signo))){
+            stringReplace = String.valueOf(opTerminos(termino[0], termino[1], signo));
+        } else {
+            stringReplace = String.valueOf((int)opTerminos(termino[0], termino[1], signo));
+        }
+        return operacion.replace(indexOperacionActual-tamañoBase, operacion.indexOfSigns( indexOperacionActual+1, "/x-+^"), String.valueOf(stringReplace));
     }
 
     private double opTerminos(double termino1, double termino2, String signo){
@@ -862,5 +902,95 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return ret;
+    }
+
+    private boolean comprobarParentesis(){
+        boolean ret = false;
+        int conteoParentInicio = 0, conteoParentCierre = 0;
+        StringBuilder cadena = new StringBuilder(numeroMostrar.toString()+"1234567890");
+
+        for (int a = 0; a < cadena.length(); a++){
+            if (cadena.indexOf("(") != -1){
+                conteoParentInicio++;
+                cadena.deleteCharAt(cadena.indexOf("("));
+            }
+
+            if (cadena.indexOf(")") != -1){
+                conteoParentCierre++;
+                cadena.deleteCharAt(cadena.indexOf(")"));
+            } else {
+                break;
+            }
+        }
+
+        if (conteoParentCierre == conteoParentInicio){
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    private void deshacerParentesis(int indexApertura, int indexCierre, String replace){
+        operacion.replace(indexApertura, indexCierre, replace);
+    }
+
+    private void operarParentesis(){
+        for (int a = 0; a < conteoPotencia ; a++) {
+            int indexPotenciaActual = parentesisActual.indexOf("^");
+            if (indexPotenciaActual != -1){
+                parentesisActual = operacionParentesis("^", indexPotenciaActual, parentesisActual);
+            }
+
+        }
+
+        int conteoSigno = conteoDiv + conteoMulti;
+
+        for (int a = 0; a < conteoSigno; a++){
+            int indexDivisionActual = parentesisActual.indexOf("/");
+            int indexMultiplicacionActual = parentesisActual.indexOf("x");
+
+            if (indexDivisionActual != -1 && indexMultiplicacionActual != -1){
+                if (indexMultiplicacionActual < indexDivisionActual){
+                    parentesisActual = operacionParentesis("x", indexMultiplicacionActual, parentesisActual);
+
+                } else {
+                    parentesisActual = operacionParentesis("/", indexDivisionActual, parentesisActual);
+
+                }
+
+
+            } else if (indexDivisionActual >= 1){
+                parentesisActual = operacionParentesis("/", indexDivisionActual, parentesisActual);
+
+            } else if (indexMultiplicacionActual >= 1){
+                parentesisActual = operacionParentesis("x", indexMultiplicacionActual, parentesisActual);
+            }
+
+        }
+
+
+        conteoSigno = conteoSuma + conteoResta;
+
+        for (int a = 0; a < conteoSigno; a++){
+            int indexSumaActual = parentesisActual.indexOf("+");
+            int indexRestaActual = parentesisActual.indexOf("-");
+
+            if (indexSumaActual != -1 && indexRestaActual != -1){
+                if (indexRestaActual < indexSumaActual){
+                    parentesisActual = operacionParentesis("-", indexRestaActual, parentesisActual);
+
+                } else {
+                    parentesisActual = operacionParentesis("+", indexSumaActual, parentesisActual);
+
+                }
+
+            } else if (indexSumaActual >= 1){
+                parentesisActual = operacionParentesis("+", indexSumaActual, parentesisActual);
+
+            } else if (indexRestaActual >= 1){
+                parentesisActual = operacionParentesis("-", indexRestaActual, parentesisActual);
+            }
+
+        }
     }
 }
