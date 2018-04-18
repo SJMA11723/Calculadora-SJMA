@@ -6,4 +6,37 @@
     <string name="dontWork">Este botón aún no funciona</string>
     <string name="divByZero">Un número no se puede dividir entre cero</string>
     <string name="parentesis">Paréntesis</string>
+    <string name="porcentaje">Porcentaje</string>
+    <string name="numeroMagico">¡Número mágico!</string>
+    <string name="numeroMagicoMessage">Ese número es mágico, ¡felicidades!</string>
+    <string name="continuar">Continuar</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="saltoDeLinea" translatable="false">\n</string>
+    <string name="ERROR">ERROR</string>
+    <string name="mayorQueDescription" translatable="false">&gt;</string>
+    <string name="menorQueDescription" translatable="false">&lt;</string>
+    <string name="backspaceDescription" translatable="false">Backspace</string>
+    <string name="parentesisCierre" translatable="false">)</string>
+    <string name="parentesisApertura" translatable="false">(</string>
+    <string name="raizCuadrada" translatable="false">√</string>
+    <string name="clear" translatable="false">C</string>
+    <string name="powDescription" translatable="false">^</string>
+    <string name="pointDescription" translatable="false">.</string>
+    <string name="equalDescription" translatable="false">=</string>
+    <string name="multiDescription" translatable="false">x</string>
+    <string name="div" translatable="false">/</string>
+    <string name="sumDescription" translatable="false">+</string>
+    <string name="substractionDescription" translatable="false">-</string>
+    <string name="zeroDescription" translatable="false">0</string>
+    <string name="oneDescription" translatable="false">1</string>
+    <string name="twoDescription" translatable="false">2</string>
+    <string name="threeDescription" translatable="false">3</string>
+    <string name="fourDescription" translatable="false">4</string>
+    <string name="fiveDescription" translatable="false">5</string>
+    <string name="sixDescription" translatable="false">6</string>
+    <string name="sevenDescription" translatable="false">7</string>
+    <string name="eightDescription" translatable="false">8</string>
+    <string name="nineDescription" translatable="false">9</string>
+
+    <string name="title_activity_image" translatable="false">ImageActivity</string>
 </resources>

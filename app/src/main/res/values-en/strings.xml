@@ -6,4 +6,11 @@
     <string name="textERROR">You will cause an error if you touch again</string>
     <string name="dontWork">This button don\'t work yet</string>
     <string name="divByZero">A number cannot be divided by zero</string>
+    <string name="ERROR">ERROR</string>
+    <string name="continuar">Continue</string>
+    <string name="contraseña">Password</string>
+    <string name="numeroMagicoMessage">These number is magic, congratulation!</string>
+    <string name="numeroMagico">Magic number!</string>
+    <string name="porcentaje">Percent</string>
+    <string name="parentesis">Parenthesis</string>
 </resources>
