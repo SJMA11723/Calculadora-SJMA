@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Calculadora SJMA</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="textERROR">Causarás un error si tocas otra vez</string>
+    <string name="dontWork">Este botón aún no funciona</string>
+    <string name="divByZero">Un número no se puede dividir entre cero</string>
+    <string name="parenthesis">Paréntesis</string>
+    <string name="percent">Porcentaje</string>
+    <string name="magicNumber">¡Número mágico!</string>
+    <string name="magicNumberMessage">Este número es mágico, ¡felicidades!</string>
+    <string name="canContinue">Continuar</string>
+    <string name="password">Contraseña</string>
+    <string name="ERROR">ERROR</string>
+    <string name="greaterThanSymbol" translatable="false">&gt;</string>
+    <string name="lessThanSymbol" translatable="false">&lt;</string>
+    <string name="backspaceDescription" translatable="false">Backspace</string>
+    <string name="parenthesisClose" translatable="false">)</string>
+    <string name="parenthesisOpen" translatable="false">(</string>
+    <string name="sqrt" translatable="false">√</string>
+    <string name="clear" translatable="false">C</string>
+    <string name="powSymbol" translatable="false">^</string>
+    <string name="dotSymbol" translatable="false">.</string>
+    <string name="equalSymbol" translatable="false">=</string>
+    <string name="multiSymbol" translatable="false">×</string>
+    <string name="div" translatable="false">÷</string>
+    <string name="plus" translatable="false">+</string>
+    <string name="minus" translatable="false">-</string>
+    <string name="zero" translatable="false">0</string>
+    <string name="one" translatable="false">1</string>
+    <string name="two" translatable="false">2</string>
+    <string name="three" translatable="false">3</string>
+    <string name="four" translatable="false">4</string>
+    <string name="five" translatable="false">5</string>
+    <string name="six" translatable="false">6</string>
+    <string name="seven" translatable="false">7</string>
+    <string name="eight" translatable="false">8</string>
+    <string name="nine" translatable="false">9</string>
+
+    <string name="title_activity_image" translatable="false">ImageActivity</string>
+    <string name="operationUndefined">Indefinido</string>
+    <string name="operationIndeterminate">Indeterminado</string>
+</resources>

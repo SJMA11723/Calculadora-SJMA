@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Calculator SJMA</string>
+    <string name="welcome">Welcome</string>
+    <string name="textERROR">You will cause an error if you touch again</string>
+    <string name="dontWork">This button don\'t work yet</string>
+    <string name="divByZero">A number cannot be divided by zero</string>
+    <string name="ERROR">ERROR</string>
+    <string name="canContinue">Continue</string>
+    <string name="password">Password</string>
+    <string name="magicNumberMessage">This number is magic, congratulations!</string>
+    <string name="magicNumber">Magic number!</string>
+    <string name="percent">Percent</string>
+    <string name="parenthesis">Parenthesis</string>
+    <string name="operationUndefined">Undefined</string>
+    <string name="operationIndeterminate">Indeterminate</string>
+</resources>

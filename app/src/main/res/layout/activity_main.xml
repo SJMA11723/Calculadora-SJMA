@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context="com.sjma11723.calculadorasjma.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_weight="2"
+        android:background="#999999"
+        android:id="@+id/scrollView">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="@string/welcome"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/buttonRaiz"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_sqrt"
+            android:contentDescription="@string/sqrt"/>
+
+        <ImageButton
+            android:id="@+id/buttonParentesisApertura"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_parent_opening"
+            android:contentDescription="@string/parenthesisOpen"/>
+
+        <ImageButton
+            android:id="@+id/buttonParentesisCierre"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_parent_closing"
+            android:contentDescription="@string/parenthesisClose"/>
+
+        <ImageButton
+            android:id="@+id/buttonClear"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_clear"
+            android:contentDescription="@string/clear"/>
+
+        <ImageButton
+            android:id="@+id/buttonBorrar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_backspace"
+            android:contentDescription="@string/backspaceDescription"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/button7"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_seven"
+            android:contentDescription="@string/seven"/>
+
+        <ImageButton
+            android:id="@+id/button8"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_eight"
+            android:contentDescription="@string/eight"/>
+
+        <ImageButton
+            android:id="@+id/button9"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_nine"
+            android:contentDescription="@string/nine"/>
+
+        <ImageButton
+            android:id="@+id/buttonPotencia"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:textStyle="bold"
+            android:src="@mipmap/ic_pow"
+            android:contentDescription="@string/powSymbol"/>
+
+        <ImageButton
+            android:id="@+id/buttonMenorQue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_lower_than"
+            android:contentDescription="@string/lessThanSymbol"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_four"
+            android:contentDescription="@string/four"/>
+        <ImageButton
+            android:id="@+id/button5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_five"
+            android:contentDescription="@string/five"/>
+        <ImageButton
+            android:id="@+id/button6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_six"
+            android:contentDescription="@string/six"/>
+        <ImageButton
+            android:id="@+id/buttonDiv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_div"
+            android:contentDescription="@string/div"/>
+        <ImageButton
+            android:id="@+id/buttonMayorQue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_greater_than"
+            android:contentDescription="@string/greaterThanSymbol"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_one"
+            android:contentDescription="@string/one"/>
+        <ImageButton
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_two"
+            android:contentDescription="@string/two"/>
+        <ImageButton
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_three"
+            android:contentDescription="@string/three"/>
+        <ImageButton
+            android:id="@+id/buttonSuma"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_sum"
+            android:contentDescription="@string/plus"/>
+        <ImageButton
+            android:id="@+id/buttonResta"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_substraction"
+            android:contentDescription="@string/minus"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/buttonPunto"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_punto"
+            android:contentDescription="@string/dotSymbol"/>
+
+        <ImageButton
+            android:id="@+id/button0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_zero"
+            android:contentDescription="@string/zero"/>
+
+        <ImageButton
+            android:id="@+id/buttonERROR"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_error"
+            android:contentDescription="@string/ERROR"/>
+
+        <ImageButton
+            android:id="@+id/buttonMulti"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_multiplicacion"
+            android:contentDescription="@string/multiSymbol"/>
+
+        <ImageButton
+            android:id="@+id/buttonIgual"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:src="@mipmap/ic_igual"
+            android:contentDescription="@string/equalSymbol"/>
+    </LinearLayout>
+
+</LinearLayout>
