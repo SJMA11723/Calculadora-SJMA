@@ -5,4 +5,4 @@
  
  Play Store (open testing): https://play.google.com/store/apps/details?id=com.sjma11723.calculadorasjma
  
- Basically it works by processing the string written by the user and make the operations in the hierarchy of operations using Divide and Conquer algorithm (it can be represented as a binary tree).
+ An calculator app where you can write a string containing an algebraic expression (with no variables) and output the value of the calculations by processing the string using implicitly a parse tree.
